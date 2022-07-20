@@ -1,21 +1,18 @@
-// address bar implementation
 let cells = document.querySelectorAll(".grid .cell");
-// 1. cell eventlistener -> on click
+
 for (let i = 0; i < cells.length; i++) {
-    // 2. when a cell is clicked -> element
     cells[i].addEventListener("click", function () {
-        // console.log("Event happend");
         let cCell = cells[i];
         // console.log(cCell);
-        // 3. get rid,cid-> address me convert
+        
         let rid = Number(cCell.getAttribute("rid"));
         let cid = Number(cCell.getAttribute("cid"));
         let address = String.fromCharCode(cid + 65) + (rid + 1);
         // console.log(address);
-        // 4.  put it into address bar
+        
         addressBar.value = address;
 
-        // step 3 menu bar -> set
+
         setMenuBar(rid, cid);
 
     })
@@ -46,7 +43,6 @@ function setMenuBar(rid, cid) {
     // font family
     fontFamilySelector.value = cellObj.fontFamily;
     // ui changes 
-    // remove selected class from every elem 
     for (let j = 0; j < alignmentBtns.length; j++) {
         alignmentBtns[j].classList.remove("selected");
     }
