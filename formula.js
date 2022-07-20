@@ -1,6 +1,6 @@
 // *********************************************set value*****************************
 for (let i = 0; i < cells.length; i++) {
-    // 2. when a cell is clicked -> element
+    // when a cell is clicked -> element
     cells[i].addEventListener("blur", function () {
         // db set value
         let { rid, cid } = getRidCidFromUI(cells[i]);
@@ -17,19 +17,14 @@ for (let i = 0; i < cells.length; i++) {
 }
 function evaluateChildren(children) {
     for (let i = 0; i < children.length; i++) {
-        // B1
         let cChildren = children[i];
-        // 0,1
         let { rid, cid } = getRidCidFromStringAddress(cChildren);
-        // {}
         let dbChildrenCell = db[rid][cid];
-        // (A1 +A2 )
+
         let cFormula = dbChildrenCell.formula;
-        // 120
         let ans = evaluate(cFormula);
-        // ui +db -> 120
         setCell(ans, rid, cid);
-        // grandchild
+
         let grandChildren = dbChildrenCell.children;
         console.log(grandChildren);
         evaluateChildren(grandChildren);
@@ -38,9 +33,7 @@ function evaluateChildren(children) {
 // *******************************************set formula***************************************
 const formulaBar = document.querySelector(".formula_bar");
 formulaBar.addEventListener("keypress", function (e) {
-    // enter is pressed and formulabar is not empty 
     if (e.key == "Enter" && formulaBar.value != "") {
-        // formula wala logic implementation
         let formula = formulaBar.value;
         let cCell = addressBar.value;
         let { rid, cid } = getRidCidFromAddressBar();
@@ -64,8 +57,7 @@ formulaBar.addEventListener("keypress", function (e) {
 function removeFormula(dbCell, cCell) {
     let formula = dbCell.formula
     let formulaEntities = formula.split(" ");
-    //  A1,A2 ke children ke array me hamne b1 ko put kar dia hai 
-    // remove parent from children
+    
     for (let i = 0; i < formulaEntities.length; i++) {
         let cEntity = formulaEntities[i];
         let ascii = cEntity.charCodeAt(0);
@@ -85,12 +77,10 @@ function removeFormula(dbCell, cCell) {
 }
 
 function evaluate(formula) {
-    // parse -> ( A1 + A2 )->get cells from formula
     // ( A1 + A2 )-> split(" ")-> array -> [(,A1,+,A2,)]
     let formulaEntities = formula.split(" ");
     for (let i = 0; i < formulaEntities.length; i++) {
         let cEntity = formulaEntities[i];
-        // -> jis bhi entity  ka first char  
         let ascii = cEntity.charCodeAt(0);
         // / lies b/w -> A to Z we want that  
         if (ascii >= 65 && ascii <= 90) {
@@ -104,19 +94,14 @@ function evaluate(formula) {
             formulaEntities[i] = value;
         }
     }
-    // console.log("formula entities", formulaEntities);
-    // ->(20+30)-> 
+   
     // replaced with values 
     let formulaToEvaluate = formulaEntities.join("");
-    // console.log("formula to evaluate", formulaToEvaluate);
-    // answer
-    // stacks-> infix evaluation 
     console.log(formulaToEvaluate);
     let ans = eval(formulaToEvaluate);
     return ans;
 }
 function setCell(ans, rid, cid) {
-    // ui pe change 
     let cell = document.querySelector
         (`.grid .cell[rid="${rid}"][cid="${cid}"]`);
     cell.innerText = ans;
@@ -126,7 +111,6 @@ function setCell(ans, rid, cid) {
 function setFormulaInDb(formula, rid, cid, ans, cCell) {
     db[rid][cid].formula = formula;
     let formulaEntities = formula.split(" ");
-    //  A1,A2 ke children ke array me hamne b1 ko put kar dia hai 
     for (let i = 0; i < formulaEntities.length; i++) {
         let cEntity = formulaEntities[i];
         let ascii = cEntity.charCodeAt(0);
